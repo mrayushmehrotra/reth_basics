@@ -26,5 +26,31 @@ async fn main() -> Result<()>{
 
     let other_address_hex = "0xaf206dCE72A0ef76643dfeDa34DB764E2126E646";
     let other_address = "0xaf206dCE72A0ef76643dfeDa34DB764E2126E646".parse::<Address>()?;
+    let other_balance = provider.get_balance(other_address,None).await?;
+println!(
+    "Balance for address {}: {}",
+    other_address_hex, other_balance
+    );
+    let tx = TransactionRequest::pay(other_address, U256::from(100u64)).from(first_address);
+
+    let receipt = provider 
+        .send_transaction(tx, None)
+        .await?
+        .log_msg("Pending Transfer")
+        .confirmations(1)
+        .await? 
+        .context("Mssing receipt")?;
+
+    println!("TX mined in block {}", 
+             receipt.block_number.context("cannot get the block number")? 
+             );
+    println!(
+        "balance of {} {}",
+        other_address_hex,
+        provider.get_balance(other_address, None).await?
+        );
+    Ok(())
+            
+    
 
 }
