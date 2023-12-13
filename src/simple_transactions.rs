@@ -4,7 +4,7 @@ use ethers::{
     prelude::{Address,LocalWallet, Middleware, Provider, Signer, TransactionRequest, U256},
     utils::Ganache,
 };
-use eyre::{ContextCompact, Result};
+use eyre::{ContextCompat,Result};
 use hex::ToHex;
 
 #[tokio::main]
@@ -50,7 +50,4 @@ println!(
         provider.get_balance(other_address, None).await?
         );
     Ok(())
-            
-    
-
 }
